@@ -4,6 +4,26 @@ void main() {
   runApp(MyApp());
 }
 
+class CalculatingWidget extends StatelessWidget {
+  const CalculatingWidget(this._isCalculating, {Key? key}) : super(key: key);
+
+  final bool _isCalculating;
+
+  @override
+  Widget build(BuildContext context) {
+    return _isCalculating ?
+    DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.black38,
+        ),
+        child: Center(
+            child: CircularProgressIndicator()
+        )
+    )
+        : const SizedBox.shrink();
+  }
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,6 +52,7 @@ class _CalculatorState extends State<Calculator> {
   String _operator = "";
   String _result = "";
   int _num = 0;
+  bool _isCalculating = false;
 
   void _clear() {
     _formula = "";
@@ -41,14 +62,26 @@ class _CalculatorState extends State<Calculator> {
     _result = "";
   }
 
-  void _numeric(String text) {
+  void _numeric(String text) async {
+
     setState(() {
-      if (_numText == "0") {
-        _numText = "";
-      }
-      _numText = _numText + text;
-      _result = _numText;
+      _isCalculating = true;
     });
+
+    Future.delayed(const Duration(seconds: 1)).then((_) {
+      setState(() {
+        if (_numText == "0") {
+          _numText = "";
+        }
+        _numText = _numText + text;
+        _result = _numText;
+      });
+    }).whenComplete(() {
+      setState(() {
+        _isCalculating = false;
+      });
+    });
+
   }
 
   int _calculate(String operator, int num1, int num2) {
@@ -152,14 +185,20 @@ class _CalculatorState extends State<Calculator> {
               child: Container(
                 color: Colors.black54,
                 width: double.infinity,
-                child: FittedBox(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    '$_result',
-                    style: TextStyle(
-                      color: Colors.white,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    FittedBox(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '$_result',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
+                    CalculatingWidget(_isCalculating),
+                  ],
                 ),
               ),
             ),
