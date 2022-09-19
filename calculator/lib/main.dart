@@ -128,8 +128,8 @@ class _CalculatorState extends State<Calculator> {
           ),
         ),
         style: ElevatedButton.styleFrom(
-            primary: Colors.black38,
-            onPrimary: Colors.black87,
+            backgroundColor: Colors.black38,
+            foregroundColor: Colors.black87,
             minimumSize: const Size(double.infinity, double.infinity)),
       ),
     );
@@ -146,8 +146,8 @@ class _CalculatorState extends State<Calculator> {
           ),
         ),
         style: ElevatedButton.styleFrom(
-            primary: Colors.black45,
-            onPrimary: Colors.black87,
+            backgroundColor: Colors.black45,
+            foregroundColor: Colors.black87,
             minimumSize: const Size(double.infinity, double.infinity)),
       ),
     );
